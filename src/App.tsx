@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./pages/Layout";
 import Agregar from "./pages/Agregar";
 import Listado from "./pages/Listado";
@@ -13,10 +13,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Layout" element={<Layout />} />
-        <Route path="/Agregar" element={<Agregar />} />
-        <Route path="/Listado" element={<Listado />} />
-        <Route path="/Registro" element={<Registro />} />
+        <Route path="/Layout" element={<Navigate to="/" replace />} />
+        <Route path="/Layout" element={<Layout />}>
+          <Route path="Agregar" element={<Agregar />} />
+          <Route path="Listado" element={<Listado />} />
+          <Route path="Registro" element={<Registro />} />
+        </Route>
+        <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>
   );

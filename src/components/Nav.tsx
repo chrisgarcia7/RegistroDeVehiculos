@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { Ripple } from "primereact/ripple";
 import { StyleClass } from "primereact/styleclass";
+import { Link } from "react-router-dom";
 
 interface Props {
   abrir: boolean;
@@ -116,36 +117,58 @@ export default function Nav({ abrir, setAbrir }: Props) {
                   <div className="p-ripple p-3 flex align-items-center justify-content-between text-600 cursor-pointer">
                     <ul className="list-none p-0 m-0 overflow-hidden">
                       <li>
-                        <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
-                          <i className="pi pi-home mr-2"></i>
-                          <span className="font-medium">Home</span>
-                          <Ripple />
-                        </a>
+                        <Link
+                          to="/"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
+                            <i className="pi pi-home mr-2"></i>
+                            <span className="font-medium">Home</span>
+                            <Ripple />
+                          </a>
+                        </Link>
                       </li>
                       <li>
-                        <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
-                          <i className="pi pi-home mr-2"></i>
-                          <span className="font-medium">Agregar Vehiculo</span>
-                          <Ripple />
-                        </a>
+                        <Link
+                          to="/Layout/Agregar"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
+                            <i className="pi pi-plus-circle mr-2"></i>
+                            <span className="font-medium">
+                              Agregar Vehiculo
+                            </span>
+                            <Ripple />
+                          </a>
+                        </Link>
                       </li>
                       <li>
-                        <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
-                          <i className="pi pi-bookmark mr-2"></i>
-                          <span className="font-medium">
-                            Lista de vehiculos
-                          </span>
-                          <Ripple />
-                        </a>
+                        <Link
+                          to="/Layout/Listado"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
+                            <i className="pi pi-book mr-2"></i>
+                            <span className="font-medium">
+                              Lista de vehiculos
+                            </span>
+                            <Ripple />
+                          </a>
+                        </Link>
                       </li>
                       <li>
-                        <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
-                          <i className="pi pi-users mr-2"></i>
-                          <span className="font-medium">
-                            Entrada y Salida de Vehiculos
-                          </span>
-                          <Ripple />
-                        </a>
+                        <Link
+                          to="/Layout/Registro"
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
+                            <i className="pi pi-directions mr-2"></i>
+                            <span className="font-medium">
+                              Entrada y Salida de Vehiculos
+                            </span>
+                            <Ripple />
+                          </a>
+                        </Link>
                       </li>
                     </ul>
                   </div>

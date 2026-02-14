@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Nav from "../components/Nav";
 import { Button } from "primereact/button";
+import { Outlet } from "react-router-dom";
 
 export default function Layout() {
   const [abrir, setAbrir] = useState<boolean>(false);
@@ -15,9 +16,10 @@ export default function Layout() {
         text
         raised
         severity="secondary"
+        className="m-3"
       />
-      <h1>{abrir ? <b>es verdadero</b> : <b>es falso</b>}</h1>
       <Nav abrir={abrir} setAbrir={setAbrir} />
+      <Outlet />
     </>
   );
 }
