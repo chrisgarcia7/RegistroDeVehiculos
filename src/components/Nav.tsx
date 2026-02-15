@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
 import { Avatar } from "primereact/avatar";
 import { Ripple } from "primereact/ripple";
-import { StyleClass } from "primereact/styleclass";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -13,11 +12,6 @@ interface Props {
 
 export default function Nav({ abrir, setAbrir }: Props) {
   const [visible, setVisible] = useState<boolean>(abrir);
-  const btnRef1 = useRef<any>(null);
-  const btnRef2 = useRef<any>(null);
-  const btnRef3 = useRef<any>(null);
-  const btnRef4 = useRef<any>(null);
-  const closeIconRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setVisible(abrir);
@@ -136,7 +130,7 @@ export default function Nav({ abrir, setAbrir }: Props) {
                           <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
                             <i className="pi pi-plus-circle mr-2"></i>
                             <span className="font-medium">
-                              Agregar Vehiculo
+                              Agregar Vehículo
                             </span>
                             <Ripple />
                           </a>
@@ -150,7 +144,7 @@ export default function Nav({ abrir, setAbrir }: Props) {
                           <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
                             <i className="pi pi-book mr-2"></i>
                             <span className="font-medium">
-                              Lista de vehiculos
+                              Lista de Vehículos
                             </span>
                             <Ripple />
                           </a>
@@ -164,7 +158,7 @@ export default function Nav({ abrir, setAbrir }: Props) {
                           <a className="p-ripple flex align-items-center cursor-pointer p-3 border-round text-700 hover:surface-100 transition-duration-150 transition-colors w-full">
                             <i className="pi pi-directions mr-2"></i>
                             <span className="font-medium">
-                              Entrada y Salida de Vehiculos
+                              Entrada y Salida de Vehículos
                             </span>
                             <Ripple />
                           </a>

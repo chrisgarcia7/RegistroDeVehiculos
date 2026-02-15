@@ -71,7 +71,7 @@ export default function Home() {
         <div className="grid">
           <div className="col-12 md:col-6 lg:col-4">
             <Card
-              title="Agregar Vehiculo"
+              title="Agregar Vehículo"
               footer={
                 <Link
                   to="/Layout/Agregar"
@@ -97,13 +97,13 @@ export default function Home() {
               style={{ minHeight: "420px" }}
             >
               <div className="flex flex-column justify-content-between h-full">
-                <p>Agrega un nuevo vehiculo a la lista</p>
+                <p>Agrega un nuevo vehículo a la lista</p>
               </div>
             </Card>
           </div>
           <div className="col-12 md:col-6 lg:col-4">
             <Card
-              title="Lista de Vehiculos"
+              title="Lista de Vehículos"
               footer={
                 <Link
                   to="/Layout/Listado"
@@ -129,13 +129,13 @@ export default function Home() {
               style={{ minHeight: "420px" }}
             >
               <div className="flex flex-column justify-content-between h-full">
-                <p>Ver el listado de vehiculos registrados</p>
+                <p>Ver el listado de vehículos registrados</p>
               </div>
             </Card>
           </div>
           <div className="col-12 md:col-6 lg:col-4">
             <Card
-              title="Registro de Entrada y Salida de Vehiculos"
+              title="Registro de Entrada y Salida de Vehículos"
               className="h-full shadow-2"
               style={{ minHeight: "420px" }}
               footer={
@@ -161,7 +161,7 @@ export default function Home() {
               }
             >
               <div className="flex flex-column justify-content-between h-full">
-                <p>Ver registro de entrada y salida de vehiculos</p>
+                <p>Ver registro de entrada y salida de vehículos</p>
               </div>
             </Card>
           </div>
