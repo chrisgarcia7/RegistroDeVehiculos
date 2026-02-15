@@ -1,41 +1,54 @@
 import React, { useState } from "react";
 import Nav from "../components/Nav";
 import { Button } from "primereact/button";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 export default function Layout() {
   const [abrir, setAbrir] = useState<boolean>(false);
+  const location = useLocation();
+
+  const getTitle = () => {
+    switch (location.pathname) {
+      case "/Layout/Agregar":
+        return "Adición de Vehículos";
+      case "/Layout/Listado":
+        return "Listado de Vehículos";
+      case "/Layout/Registro":
+        return "Registro de Entrada y Salida";
+      default:
+        return "Adición de Vehículos";
+    }
+  };
   return (
     <>
+      <Nav abrir={abrir} setAbrir={setAbrir} />
       <div className="flex">
-        {/* Sidebar */}
-        <Nav abrir={abrir} setAbrir={setAbrir} />
-
-        {/* Contenedor principal */}
-        <main className="flex-1 relative">
-          {/* Botón encima del contenido */}
-          <Button
-            icon="pi pi-bars"
-            onClick={() => setAbrir(true)}
-            rounded
-            text
-            raised
-            severity="secondary"
+        <main className="flex-1">
+          <div
+            className="flex align-items-center shadow-4 p-4"
             style={{
-              position: "absolute",
-              top: "20px", // Ajusta la distancia desde arriba
-              right: "20px", // Ajusta la distancia desde la derecha
-              zIndex: 1000, // Asegura que esté por encima del Outlet
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }} // z muy alto
-          />
-
-          <Outlet />
+              background: "linear-gradient(135deg, #1e3c72, #2a5298)",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <div className="flex align-items-center flex-1">
+              <Button
+                icon="pi pi-bars"
+                onClick={() => setAbrir(true)}
+                text
+                className="text-white"
+              />
+            </div>
+            <div className="flex justify-content-center flex-1">
+              <h2 className="text-4xl font-bold m-0 text-white text-center">
+                {getTitle()}
+              </h2>
+            </div>
+            <div className="flex-1"></div>
+          </div>
         </main>
       </div>
+      <Outlet />
     </>
   );
 }
