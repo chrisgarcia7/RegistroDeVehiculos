@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 // import "bootstrap/dist/js/bootstrap.bundle";
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.css";
+import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import { PrimeReactProvider } from "primereact/api";
