@@ -92,10 +92,10 @@ export default function Registro() {
     );
   };
 
-  const placaItemTemplate = (option: Entrada) => {
+  const placaItemTemplate = (option: Vehiculo) => {
     return (
       <div className="flex align-items-center gap-2">
-        <span>{option.placa_vehiculo}</span>
+        <span>{option.placa}</span>
       </div>
     );
   };
@@ -110,6 +110,7 @@ export default function Registro() {
           options.filterCallback(e.value)
         }
         optionLabel="placa"
+        optionValue="placa"
         placeholder="Filtrar por placa"
         className="p-column-filter"
       />
@@ -252,14 +253,15 @@ export default function Registro() {
             <DataTable
               value={listaEntradas}
               scrollable
-              scrollHeight="flex"
+              scrollHeight="350px"
               tableStyle={{ minWidth: "50rem" }}
             >
               <Column field="vehiculo_id" header="Registro" />
               <Column
                 field="placa_vehiculo"
                 header="Placa"
-                filterField="placa"
+                filterField="placa_vehiculo"
+                filterMatchMode="in"
                 showFilterMatchModes={false}
                 body={placaBodyTemplate}
                 filter
