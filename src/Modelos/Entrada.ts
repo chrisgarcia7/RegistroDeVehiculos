@@ -6,4 +6,5 @@ export interface Entrada {
   fecha_entrada: Date;
   hora_entrada: string;
   kilometraje: number;
+  isAdentro: boolean;
 }

@@ -44,10 +44,10 @@ export default function Registro() {
   const [listaEntradas, setListaEntradas] = useState<Entrada[]>([]);
   const [placas, setPlacas] = useState([]);
 
-  const [vehiculoSalida, setVehiculoSalida] = useState();
+  const [vehiculoSalida, setVehiculoSalida] = useState<Vehiculo | null>();
   const [motoristaSalida, setMotoristaSalida] = useState("");
-  const [fechaSalida, setFechaSalida] = useState<Date>();
-  const [horaSalida, setHoraSalida] = useState("");
+  const [fechaSalida, setFechaSalida] = useState<Date | null>(new Date());
+  const [horaSalida, setHoraSalida] = useState(new Date().toLocaleTimeString());
   const [kmSalida, setKmSalida] = useState<number | null>();
   const [listaSalidas, setListaSalidas] = useState<Salida[]>([]);
 
@@ -56,6 +56,7 @@ export default function Registro() {
   useEffect(() => {
     cargarVehiculos();
     cargarEntradas();
+    cargarSalidas();
   }, []);
 
   const formatDate = (value: Date) => {
@@ -126,9 +127,6 @@ export default function Registro() {
   const cargarEntradas = async () => {
     const res = await fetch(`${process.env.REACT_APP_API_URL}/entrada`);
     const data = await res.json();
-    const placas1 = data.map((item: any) => item.placa_vehiculo);
-
-    setPlacas(placas1);
 
     const entradasFormateadas = data.map((item: any) => ({
       ...item,
@@ -138,8 +136,45 @@ export default function Registro() {
     setListaEntradas(entradasFormateadas);
   };
 
+  const cargarSalidas = async () => {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/salida`);
+    const data = await res.json();
+
+    // const entradasFormateadas = data.map((item: any) => ({
+    //   ...item,
+    //   fecha_salida: new Date(item.fecha_salida),
+    // }));
+
+    setListaSalidas(data);
+  };
+
+  const vehiculoYaEstaAdentro = (vehiculoId: number) => {
+    return listaEntradas.some(
+      (entrada) =>
+        entrada.vehiculo_id === vehiculoId && entrada.isAdentro === true,
+    );
+  };
+
   const handleSubmitEntrada = async (e: any) => {
     e.preventDefault();
+    if (!vehiculoEntrada) {
+      toast.current?.show({
+        severity: "warn",
+        summary: "Atención",
+        detail: "Debe seleccionar un vehículo",
+        life: 3000,
+      });
+      return;
+    }
+    if (vehiculoYaEstaAdentro(vehiculoEntrada.id)) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Vehículo ya registrado",
+        detail: "Este vehículo ya se encuentra dentro.",
+        life: 4000,
+      });
+      return;
+    }
     try {
       let res;
       let vehiculo_id = vehiculoEntrada?.id;
@@ -148,6 +183,7 @@ export default function Registro() {
       let fecha_entrada = fechaEntrada;
       let hora_entrada = horaEntrada;
       let kilometraje = kilometrajeE;
+      let isAdentro = true;
 
       res = await fetch(`${process.env.REACT_APP_API_URL}/entrada`, {
         method: "POST",
@@ -159,6 +195,7 @@ export default function Registro() {
           fecha_entrada,
           hora_entrada,
           kilometraje,
+          isAdentro,
         }),
       });
       console.log(res);
@@ -180,6 +217,85 @@ export default function Registro() {
           severity: "error",
           summary: "Error",
           detail: "Ha ocurrido un error al registrar su entrada",
+          life: 3000,
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmitSalida = async (e: any) => {
+    e.preventDefault();
+    cargarEntradas();
+    if (!vehiculoSalida) {
+      toast.current?.show({
+        severity: "warn",
+        summary: "Atención",
+        detail: "Debe seleccionar un vehículo",
+        life: 3000,
+      });
+      return;
+    }
+    if (!vehiculoYaEstaAdentro(vehiculoSalida.id)) {
+      toast.current?.show({
+        severity: "error",
+        summary: "Vehículo afuera",
+        detail: "Este vehículo no se encuentra adentro.",
+        life: 4000,
+      });
+      return;
+    }
+    try {
+      let res1;
+      let res2;
+      let vehiculo_id = vehiculoSalida?.id;
+      let placa_vehiculo = vehiculoSalida.placa;
+      let entradaActiva = listaEntradas.find(
+        (e) => e.vehiculo_id === vehiculo_id && e.isAdentro === true,
+      );
+      let id = entradaActiva?.id;
+      let motorista = motoristaSalida;
+      let fecha_salida = fechaSalida;
+      let hora_salida = horaSalida;
+      let isAdentro = false;
+
+      res1 = await fetch(`${process.env.REACT_APP_API_URL}/salida`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fecha_salida,
+          hora_salida,
+          vehiculo_id,
+          placa_vehiculo,
+          motorista,
+        }),
+      });
+
+      res2 = await fetch(`${process.env.REACT_APP_API_URL}/entrada/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isAdentro }),
+      });
+
+      if (res1.ok && res2.ok) {
+        toast.current?.show({
+          severity: "success",
+          summary: "Registrado Correctamente",
+          detail: "La salida ha sido registrado correctamente",
+          life: 3000,
+        });
+        cargarSalidas();
+        setVehiculoSalida(null);
+        setMotoristaSalida("");
+        setFechaSalida(new Date());
+        setHoraSalida(new Date().toLocaleTimeString());
+        cargarEntradas();
+      } else {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Ha ocurrido un error al registrar su salida",
           life: 3000,
         });
       }
@@ -256,7 +372,7 @@ export default function Registro() {
               scrollHeight="350px"
               tableStyle={{ minWidth: "50rem" }}
             >
-              <Column field="vehiculo_id" header="Registro" />
+              <Column field="id" header="# Entrada" />
               <Column
                 field="placa_vehiculo"
                 header="Placa"
@@ -299,7 +415,7 @@ export default function Registro() {
                 options={vehiculos}
                 optionLabel="placa"
                 placeholder="Seleccione vehículo"
-                onChange={(e) => setVehiculoSalida(e.value)}
+                onChange={(e) => setVehiculoSalida(e.target.value)}
               />
 
               <InputText
@@ -310,9 +426,11 @@ export default function Registro() {
 
               <Calendar
                 value={fechaSalida}
-                onChange={(e) => setFechaSalida(e.value as Date)}
+                onChange={(e) => setFechaSalida(e.value ?? null)}
                 placeholder="Fecha"
                 showIcon
+                dateFormat="dd/mm/yy"
+                mask="99/99/9999"
               />
 
               <InputText
@@ -321,17 +439,19 @@ export default function Registro() {
                 onChange={(e) => setHoraSalida(e.target.value)}
               />
 
-              <InputNumber
-                value={kmSalida}
-                onValueChange={(e) => setKmSalida(e.value ?? null)}
-                placeholder="Kilometraje"
-              />
-
               <Button
                 label="Registrar Salida"
                 icon="pi pi-sign-out"
                 severity="danger"
-                // onClick={registrarSalida}
+                onClick={handleSubmitSalida}
+                disabled={
+                  !vehiculoSalida ||
+                  !motoristaSalida ||
+                  !fechaSalida ||
+                  !horaSalida
+                    ? true
+                    : false
+                }
               />
             </div>
           </Card>
@@ -342,14 +462,14 @@ export default function Registro() {
             <DataTable
               value={listaSalidas}
               scrollable
-              scrollHeight="flex"
+              scrollHeight="350px"
               tableStyle={{ minWidth: "50rem" }}
             >
-              <Column field="vehiculo" header="Vehículo" />
+              <Column field="vehiculo_id" header="Vehículo" />
+              <Column field="placa_vehiculo" header="Placa" />
               <Column field="motorista" header="Motorista" />
-              <Column field="fecha" header="Fecha" />
-              <Column field="hora" header="Hora" />
-              <Column field="kilometraje" header="Kilometraje" />
+              <Column field="fecha_salida" header="Fecha" dataType="date" />
+              <Column field="hora_salida" header="Hora" />
             </DataTable>
           </Card>
         </div>
