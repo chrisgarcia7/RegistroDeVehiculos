@@ -48,7 +48,6 @@ export default function Registro() {
   const [motoristaSalida, setMotoristaSalida] = useState("");
   const [fechaSalida, setFechaSalida] = useState<Date | null>(new Date());
   const [horaSalida, setHoraSalida] = useState(new Date().toLocaleTimeString());
-  const [kmSalida, setKmSalida] = useState<number | null>();
   const [listaSalidas, setListaSalidas] = useState<Salida[]>([]);
 
   const [filters, setFilters] = useState<DataTableFilterMeta>(defaultFilters);
@@ -71,6 +70,10 @@ export default function Registro() {
     return formatDate(rowData.fecha_entrada);
   };
 
+  const dateBodyTemplateSal = (rowData: Salida) => {
+    return formatDate(rowData.fecha_salida);
+  };
+
   const dateFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
     return (
       <Calendar
@@ -84,6 +87,16 @@ export default function Registro() {
   };
 
   const placaBodyTemplate = (rowData: Entrada) => {
+    const placa = rowData.placa_vehiculo;
+
+    return (
+      <div className="flex align-items-center gap-2">
+        <span>{placa}</span>
+      </div>
+    );
+  };
+
+  const placaBodyTemplateSal = (rowData: Salida) => {
     const placa = rowData.placa_vehiculo;
 
     return (
@@ -140,12 +153,12 @@ export default function Registro() {
     const res = await fetch(`${process.env.REACT_APP_API_URL}/salida`);
     const data = await res.json();
 
-    // const entradasFormateadas = data.map((item: any) => ({
-    //   ...item,
-    //   fecha_salida: new Date(item.fecha_salida),
-    // }));
+    const salidasFormateadas = data.map((item: any) => ({
+      ...item,
+      fecha_salida: new Date(item.fecha_salida),
+    }));
 
-    setListaSalidas(data);
+    setListaSalidas(salidasFormateadas);
   };
 
   const vehiculoYaEstaAdentro = (vehiculoId: number) => {
@@ -466,9 +479,30 @@ export default function Registro() {
               tableStyle={{ minWidth: "50rem" }}
             >
               <Column field="vehiculo_id" header="Vehículo" />
-              <Column field="placa_vehiculo" header="Placa" />
-              <Column field="motorista" header="Motorista" />
-              <Column field="fecha_salida" header="Fecha" dataType="date" />
+              <Column
+                field="placa_vehiculo"
+                header="Placa"
+                filterField="placa_vehiculo"
+                filterMatchMode="in"
+                showFilterMatchModes={false}
+                body={placaBodyTemplateSal}
+                filter
+                filterElement={placaFilterTemplate}
+              />
+              <Column
+                field="motorista"
+                header="Motorista"
+                filter
+                filterPlaceholder="Buscar por nombre"
+              />
+              <Column
+                field="fecha_salida"
+                header="Fecha"
+                dataType="date"
+                body={dateBodyTemplateSal}
+                filter
+                filterElement={dateFilterTemplate}
+              />
               <Column field="hora_salida" header="Hora" />
             </DataTable>
           </Card>
